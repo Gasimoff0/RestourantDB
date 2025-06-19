@@ -50,7 +50,6 @@ FROM Tables t
 
 
 
-
 SELECT 
 m.MealId,
 m.MealName,
@@ -76,7 +75,7 @@ ON t.TableId=o.TableId
 WHERE o.Quantity > 0;
 
 
-SELECT DATEDIFF(HOUR,MIN(OrderDateTime),MAX(OrderDateTime)) Hoursdiff FROM Orders WHERE TableId=1
+SELECT DATEDIFF(HOUR,MIN(OrderDateTime),MAX(OrderDateTime)) HoursDiff FROM Orders WHERE TableId=1
 
 
 SELECT t.TableId, t.TableNumber,
@@ -87,8 +86,21 @@ ON t.TableId = o.TableId
 WHERE o.OrderId IS NULL
 
 
+SELECT * FROM Orders o 
+WHERE o.OrderDateTime<DATEADD(MINUTE,-30,GETDATE())
 
 
+SElECT * FROM Tables t
+WHERE
+NOT EXISTS
+(SELECT o.TableId FROM Orders o WHERE o.TableId=t.TableId)
+
+
+SELECT * FROM Tables t
+JOIN Orders o
+ON o.TableId=t.TableId
+WHERE 
+o.OrderDateTime<DATEADD(MINUTE,-60,GETDATE())
 
 
 
